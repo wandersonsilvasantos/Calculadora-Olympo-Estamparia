@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>OLYMPO | Simulador de orçamento</title>
+<style>
+:root{--bg:#080808;--panel:#111;--panel2:#171717;--line:#303030;--text:#f5f5f5;--muted:#999;--accent:#fff;--silver:#c9c9c9;--green:#f5f5f5;--danger:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{width:min(900px,calc(100% - 32px));margin:34px auto 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:34px;padding-bottom:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:15px}.brand img{display:block;width:170px;height:auto;max-height:72px;object-fit:contain}.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;font-weight:700}.hero{margin-bottom:26px}.hero h1{font-size:clamp(29px,5vw,42px);line-height:1.05;letter-spacing:-.045em;margin:9px 0}.hero p{color:var(--muted);margin:0 0 24px}.panel,.print-card,.result{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:21px;margin-bottom:15px;box-shadow:0 12px 35px #0003}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.section-head h2,.print-title{font-size:15px;margin:0;font-weight:750;letter-spacing:.01em}.muted{color:var(--muted);font-size:12px}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.field{min-width:0}.field label{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--silver);margin-bottom:8px;font-weight:650}.field input[type=number],.field input[type=text],.field select{width:100%;background:#080808;border:1px solid #383838;border-radius:8px;padding:11px 12px;color:var(--text);font:inherit;outline:none}.field input:focus,.field select:focus{border-color:#aaa;box-shadow:0 0 0 3px #ffffff12}input[type=range]{width:100%;accent-color:#eee;cursor:pointer}.range-line{display:flex;align-items:center;gap:12px}.range-line input{flex:1;min-width:0}.value-pill{min-width:66px;text-align:center;background:#242424;border:1px solid #444;border-radius:7px;padding:4px 8px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}.btn{border:1px solid #4a4a4a;background:#1c1c1c;color:var(--text);border-radius:8px;padding:10px 14px;font:600 13px inherit;cursor:pointer;transition:.15s}.btn:hover{border-color:#aaa;background:#292929}.btn.primary{background:#f2f2f2;border:1px solid #f2f2f2;color:#080808;font-weight:800}.btn.primary:hover{background:#d7d7d7}.btn.danger{color:var(--danger);border-color:#633a3a;background:#211414}.btn.small{padding:7px 10px;font-size:11px}.print-list{display:grid;gap:13px}.print-card{margin:0;padding:17px;background:#0d0d0d}.print-card-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.print-number{color:#aaa;font-weight:800;font-size:10px;letter-spacing:.16em}.live-price{font-size:20px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}.print-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}.tag{display:inline-flex;padding:4px 8px;border-radius:5px;background:#202020;color:#ddd;font-size:10px;letter-spacing:.04em}.qty-row{display:flex;align-items:center;gap:12px}.qty-row input{max-width:190px}.result{position:sticky;bottom:12px;background:rgba(15,15,15,.97);backdrop-filter:blur(14px);border-color:#555}.result-grid{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}.total{font-size:clamp(32px,6vw,44px);line-height:1;color:#fff;font-weight:850;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.unit{font-size:21px;font-weight:750;text-align:right;font-variant-numeric:tabular-nums}.note{font-size:11px;color:var(--muted);margin:13px 0 0}.error{color:var(--danger);font-size:12px;margin-top:8px;min-height:18px}.empty{padding:22px;text-align:center;border:1px dashed #444;border-radius:10px;color:var(--muted)}.footer{text-align:center;color:#777;font-size:10px;letter-spacing:.04em;margin-top:24px}.hidden{display:none!important}
+@media(max-width:620px){.wrap{width:min(100% - 20px,900px);margin:20px auto 38px}.panel,.result{padding:15px}.field-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}.unit{text-align:left}.top{margin-bottom:25px}.brand img{width:145px}.print-card{padding:13px}.section-head{align-items:flex-start}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div class="brand"><img src="logo.png" alt="OLYMPO Estamparia"></div>
+    <div class="eyebrow">Estamparia<br>Orçamento</div>
+  </header>
+  <section class="hero">
+    <div class="eyebrow">Simulador de orçamento</div>
+    <h1>Simulador de orçamento</h1>
+    <p>Configure as estampas e veja o valor estimado do pedido.</p>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><h2>Quantidade do pedido</h2></div>
+    <div class="field">
+      <label for="quantity">Quantidade de peças</label>
+      <input id="quantity" type="number" min="1" step="1" value="100">
+      <div class="muted" id="quantityHint">Informe o número de peças do pedido.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head"><h2>Estampas do pedido</h2><button class="btn primary" id="addPrint">＋ Adicionar estampa</button></div>
+    <div class="print-list" id="printList"></div>
+    <p class="note">Adicione cada estampa e informe suas dimensões, cores e tipo de tinta.</p>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="eyebrow">Orçamento estimado</div>
+    <div class="result-grid">
+      <div><div class="total" id="grandTotal">R$ 0,00</div><div class="muted" id="quantityResult">em 100 peças</div></div>
+      <div><div class="eyebrow">Por peça</div><div class="unit" id="unitPrice">R$ 0,00</div></div>
+    </div>
+
+    <div class="error" id="errorMessage"></div>
+    <button class="btn primary" id="copyQuote" style="width:100%;margin-top:14px">Copiar orçamento</button>
+  </section>
+  <div class="footer">OLYMPO ESTAMPARIA · Valores estimados, sujeitos à confirmação do serviço.</div>
+</main>
+<script>
+/*
+  PARÂMETROS INTERNOS — ajuste aqui antes de publicar.
+  O código-fonte de um site estático é público; não inclua senhas ou dados confidenciais.
+*/
+const CONFIG = {
+  dailyScreens: 5,
+  recurringMonthly: { water: 110, electricity: 110, oil: 10, bleach: 4 },
+  monthlyDays: 30,
+  emulsion: { price: 77, screens: 35 },
+  paper: { packPrice: 50, sheetsPerPack: 250, averageSheetsPerScreen: 1.25 },
+  degreaser: { price: 30, screens: 100 },
+  // Adicional por peça e por estampa; não recebe desconto de combinação/volume.
+  inkSurcharge: { water: 0, plastisol: 0.50, highRelief: 1.00 },
+  // Adicional por cor extra, por peça e por estampa (a 1ª cor já está incluída no preço da estampa).
+  // Somado ao adicional de tinta; não recebe desconto de combinação/volume.
+  extraColorSurcharge: 0.50,
+  // Acréscimo por peça para pedidos pequenos (aplicado uma única vez por peça, não por estampa).
+  // Cada item: [quantidade máxima da faixa, acréscimo por peça]. Sem acréscimo a partir de 10 peças.
+  smallOrderFee: [[4,2.00],[9,1.00]],
+  setupAbsorbFromQuantity: 10,
+  // Curva de preço-base por maior dimensão (cm): pontos intermediários interpolados.
+  // A regra de estampa grande prevalece e garante piso de R$ 4,50.
+  priceAnchors: [[0,1.00],[5,1.00],[6,1.50],[10,1.50],[11,2.00],[12,2.50],[25,2.50],[29,4.50],[50,5.00]],
+  largePrintFloor: 4.50,
+  largePrintCeiling: 5.00,
+  // Desconto de preparação aplicado somente às telas adicionais.
+  screenDiscountByCount: { 2: 0.10, 3: 0.06, 4: 0.04, 5: 0.04, 6: 0.04 },
+  // Descontos por volume: aplicados ao valor-base das estampas, nunca à preparação de telas.
+  // Faixa atingida, sem interpolação. Item: [quantidade mínima, desconto].
+  quantityDiscounts: [
+    [1,0],[10,0],[25,.01],[50,.02],[100,.03],[250,.05],
+    [500,.07],[1000,.09],[3000,.12],[8000,.15]
+  ],
+  // Desconto individual de combinação por categoria.
+  comboDiscount: { small: 1/3, medium: .20, large: .20 }
+};
+
+const money = n => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number.isFinite(n)?n:0);
+const clamp = (n,min,max)=>Math.min(max,Math.max(min,n));
+const screenBaseCost = () => {
+  const recurringDaily = Object.values(CONFIG.recurringMonthly).reduce((a,b)=>a+b,0)/CONFIG.monthlyDays;
+  const materials = CONFIG.emulsion.price/CONFIG.emulsion.screens
+    + CONFIG.paper.packPrice/CONFIG.paper.sheetsPerPack*CONFIG.paper.averageSheetsPerScreen
+    + CONFIG.degreaser.price/CONFIG.degreaser.screens;
+  return materials + recurringDaily/CONFIG.dailyScreens;
+};
+function isLarge(w,h){ return (w<=19 && h>29) || (w>=20 && h>19); }
+function category(w,h){
+  if(isLarge(w,h)) return 'large';
+  const d=Math.max(w,h);
+  if(d<=10) return 'small';
+  return 'medium';
+}
+function interpolatePrice(d){
+  const a=CONFIG.priceAnchors;
+  if(d<=a[0][0]) return a[0][1];
+  for(let i=1;i<a.length;i++){
+    if(d<=a[i][0]){
+      const [x0,y0]=a[i-1], [x1,y1]=a[i];
+      return y0+(d-x0)*(y1-y0)/(x1-x0);
+    }
+  }
+  return a[a.length-1][1];
+}
+function basePrintPrice(w,h){
+  const d=Math.max(w,h);
+  let value=interpolatePrice(d);
+  if(isLarge(w,h)) value=clamp(Math.max(value,CONFIG.largePrintFloor),CONFIG.largePrintFloor,CONFIG.largePrintCeiling);
+  return value;
+}
+function inkExtra(ink){ return CONFIG.inkSurcharge[ink]||0; }
+function colorExtra(colors){ return Math.max(0,(Math.floor(Number(colors))||1)-1)*CONFIG.extraColorSurcharge; }
+function smallOrderFee(q){
+  for(const [maxQty,fee] of CONFIG.smallOrderFee){ if(q<=maxQty) return fee; }
+  return 0;
+}
+function printBase(w,h,ink,colors){ return basePrintPrice(w,h)+inkExtra(ink)+colorExtra(colors); }
+function quantityDiscount(q){
+  // Desconto da faixa atingida, sem interpolação entre faixas.
+  let discount=0;
+  for(const [minQty,d] of CONFIG.quantityDiscounts){ if(q>=minQty) discount=d; }
+  return discount;
+}
+let prints=[], nextId=1, latestQuote='';
+function addPrint(){
+  prints.push({id:nextId++,name:'',width:5,height:5,colors:1,ink:'water'});
+  render();
+}
+function render(){
+  const list=document.getElementById('printList');
+  list.innerHTML='';
+  if(!prints.length){list.innerHTML='<div class="empty">Nenhuma estampa adicionada. Clique em “Adicionar estampa” para começar.</div>';}
+  prints.forEach((p,index)=>{
+    const card=document.createElement('article');card.className='print-card';
+    card.innerHTML=`
+      <div class="print-card-top"><div><div class="print-number">ESTAMPA ${String(index+1).padStart(2,'0')}</div><div class="print-title">${escapeHtml(p.name.trim()||'Nova estampa')}</div></div><div class="live-price" id="price-${p.id}">${money(0)}</div></div>
+      <div class="field-grid">
+        <div class="field"><label>Nome da estampa <span class="muted">opcional</span></label><input type="text" data-id="${p.id}" data-key="name" maxlength="45" placeholder="Ex.: Peito, costas..." value="${escapeAttr(p.name)}"></div>
+        <div class="field"><label>Quantidade de cores</label><input type="number" min="1" max="12" step="1" data-id="${p.id}" data-key="colors" value="${p.colors}"></div>
+        <div class="field"><label>Largura <span class="value-pill" id="wval-${p.id}">${p.width} cm</span></label><div class="range-line"><input type="range" min="0" max="29" step="1" data-id="${p.id}" data-key="width" value="${p.width}"></div></div>
+        <div class="field"><label>Altura <span class="value-pill" id="hval-${p.id}">${p.height} cm</span></label><div class="range-line"><input type="range" min="0" max="50" step="1" data-id="${p.id}" data-key="height" value="${p.height}"></div></div>
+        <div class="field"><label>Tipo de tinta</label><select data-id="${p.id}" data-key="ink"><option value="water" ${p.ink==='water'?'selected':''}>Base d'água</option><option value="plastisol" ${p.ink==='plastisol'?'selected':''}>Plastisol</option><option value="highRelief" ${p.ink==='highRelief'?'selected':''}>Alto relevo</option></select></div>
+      </div>
+      <div class="print-meta"><span class="tag" id="class-${p.id}">Pequena</span><div><button class="btn small" data-action="reset" data-id="${p.id}">Resetar medidas</button> <button class="btn small danger" data-action="delete" data-id="${p.id}">Apagar</button></div></div>`;
+    list.appendChild(card);
+  });
+  calculate();
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function escapeAttr(s){return escapeHtml(s);}
+function updatePrint(id,key,value){
+  const p=prints.find(x=>x.id===id);if(!p)return;
+  if(key==='name')p.name=value;
+  else if(key==='ink')p.ink=value;
+  else if(key==='colors')p.colors=clamp(Math.floor(Number(value)||1),1,12);
+  else if(key==='width')p.width=clamp(Math.round(Number(value)||0),0,29);
+  else if(key==='height')p.height=clamp(Math.round(Number(value)||0),0,50);
+  if(key==='name'){
+    const title=document.querySelector(`#printList .print-card [data-id="${id}"][data-key="name"]`);
+    const card=title?.closest('.print-card');if(card)card.querySelector('.print-title').textContent=p.name.trim()||'Nova estampa';
+  }
+  if(key==='width')document.getElementById(`wval-${id}`).textContent=p.width+' cm';
+  if(key==='height')document.getElementById(`hval-${id}`).textContent=p.height+' cm';
+  calculate();
+}
+function comboRates(p){
+  const c=category(p.width,p.height);
+  return CONFIG.comboDiscount[c]||0;
+}
+function calculate(){
+  const q=Math.max(1,Math.floor(Number(document.getElementById('quantity').value)||1));
+  const error=document.getElementById('errorMessage');
+  error.textContent='';
+  if(!prints.length){
+    document.getElementById('grandTotal').textContent=money(0);
+    document.getElementById('unitPrice').textContent=money(0);
+    document.getElementById('quantityResult').textContent=`em ${q} peças`;
+    latestQuote='Adicione ao menos uma estampa para calcular o orçamento.';
+    return;
+  }
+  const screenCount=prints.reduce((sum,p)=>sum+p.colors,0);
+  const base=screenBaseCost();
+  const screenDiscount=CONFIG.screenDiscountByCount[screenCount]||0;
+  const setup=base+(screenCount-1)*base*(1-screenDiscount);
+  const setupCharged=q<CONFIG.setupAbsorbFromQuantity?setup:0;
+
+  const rawBasePrint=prints.reduce((sum,p)=>sum+basePrintPrice(p.width,p.height),0);
+  const comboDiscount=prints.length>=2
+    ?prints.reduce((sum,p)=>sum+basePrintPrice(p.width,p.height)*comboRates(p),0):0;
+  const afterCombo=Math.max(0,rawBasePrint-comboDiscount);
+  const bulk=quantityDiscount(q);
+  const discountedBasePrint=afterCombo*(1-bulk);
+  // Acréscimos de tinta e de cores ficam fora dos descontos de combinação e de quantidade.
+  const inkAddOn=prints.reduce((sum,p)=>sum+inkExtra(p.ink),0);
+  const colorAddOn=prints.reduce((sum,p)=>sum+colorExtra(p.colors),0);
+  // Taxa de pedido pequeno: uma única vez por peça, sem desconto.
+  const orderFee=smallOrderFee(q);
+  const printPerPiece=discountedBasePrint+inkAddOn+colorAddOn+orderFee;
+  const total=setupCharged+printPerPiece*q;
+  const unit=total/q;
+  document.getElementById('grandTotal').textContent=money(total);
+  document.getElementById('unitPrice').textContent=money(unit);
+  document.getElementById('quantityResult').textContent=`em ${q.toLocaleString('pt-BR')} ${q===1?'peça':'peças'}`;
+  document.getElementById('quantityHint').textContent='O orçamento é atualizado automaticamente conforme as opções.';
+  prints.forEach(p=>{
+    const el=document.getElementById(`price-${p.id}`);
+    if(el)el.textContent=money(printBase(p.width,p.height,p.ink,p.colors));
+    const cl=document.getElementById(`class-${p.id}`);
+    if(cl)cl.textContent=({small:'Pequena',medium:'Média',large:'Grande'})[category(p.width,p.height)];
+  });
+  const lines=prints.map((p,i)=>`${i+1}. ${p.name.trim()||'Estampa'} — ${p.width} × ${p.height} cm, ${p.colors} cor(es), ${p.ink==='water'?'Base d’água':p.ink==='plastisol'?'Plastisol':'Alto relevo'}`);
+  latestQuote=`ORÇAMENTO OLYMPO\n${lines.join('\n')}\nQuantidade: ${q} peças\nTOTAL: ${money(total)}\nVALOR UNITÁRIO: ${money(unit)}\nEstimativa sujeita à confirmação.`;
+}
+document.getElementById('addPrint').addEventListener('click',addPrint);
+document.getElementById('quantity').addEventListener('input',calculate);
+document.getElementById('printList').addEventListener('input',e=>{
+  const el=e.target;if(!el.dataset.id||!el.dataset.key)return;
+  updatePrint(Number(el.dataset.id),el.dataset.key,el.value);
+});
+document.getElementById('printList').addEventListener('change',e=>{
+  const el=e.target;if(!el.dataset.id||!el.dataset.key)return;
+  updatePrint(Number(el.dataset.id),el.dataset.key,el.value);
+});
+document.getElementById('printList').addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-action]');if(!btn)return;
+  const id=Number(btn.dataset.id),action=btn.dataset.action;
+  if(action==='delete'){prints=prints.filter(p=>p.id!==id);render();}
+  if(action==='reset'){const p=prints.find(p=>p.id===id);if(p){p.width=0;p.height=0;render();}}
+});
+document.getElementById('copyQuote').addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(latestQuote);document.getElementById('copyQuote').textContent='Orçamento copiado!';setTimeout(()=>document.getElementById('copyQuote').textContent='Copiar orçamento',1600);}
+  catch{document.getElementById('errorMessage').textContent='Não foi possível copiar automaticamente. Selecione e copie os valores exibidos.';}
+});
+addPrint();
+</script>
+</body>
+</html>
